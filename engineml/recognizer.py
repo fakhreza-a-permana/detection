@@ -16,6 +16,13 @@ class ActivityRecognizer:
         "usingcomputer"
     ]
 
+    CLASS_COLORS = {
+        "lecturing": (44, 121, 65),          
+        "listening": (209, 125, 42),          
+        "realtime_writing": (141, 19, 176),   
+        "usingcomputer": (55, 250, 250),    
+    }
+
     def __init__(
         self,
         yolo_model,
@@ -76,13 +83,21 @@ class ActivityRecognizer:
         annotated = frame.copy()
         detections = []
 
-        results = self.detector(
+        # results = self.detector(
+        #     frame,
+        #     classes=[0],
+        #     verbose=False
+        # )
+
+        results = self.detector.track(
             frame,
+            persist=True,
             classes=[0],
+            tracker="bytetrack.yaml",
             verbose=False
         )
 
-        person_id = 1
+        # person_id = 1
 
         for box in results[0].boxes:
             x1, y1, x2, y2 = map(
@@ -131,12 +146,12 @@ class ActivityRecognizer:
                 f"{activity} "
                 f"{conf_act:.2f}"
             )
-
+            color = self.CLASS_COLORS.get(activity, (255, 255, 255))
             cv2.rectangle(
                 annotated,
                 (x1, y1),
                 (x2, y2),
-                (0, 255, 0),
+                color,
                 2
             )
             cv2.putText( annotated,
@@ -144,10 +159,10 @@ class ActivityRecognizer:
                 (x1, y1 - 10),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 0.6,
-                (0, 255, 0),
+                color,
                 2
             )
-
+            person_id = int(box.id)
             detections.append({
                 "person": person_id,
                 "activity": activity,
@@ -160,7 +175,7 @@ class ActivityRecognizer:
                     y2
                 ]
             })
-            person_id += 1
+            # person_id += 1
 
         return {
             "frame": annotated,

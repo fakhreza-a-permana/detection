@@ -9,3 +9,12 @@ def start(job):
     )
 
     thread.start()
+
+def restart(job):
+
+    thread = threading.Thread(
+        target=VideoProcessor(job).process,
+        daemon=True
+    )
+
+    thread.start()

@@ -10,8 +10,12 @@ class VideoProcess(models.Model):
         ("COMPLETED","Completed"),
         ("FAILED","Failed"),
     ]
+    nama_praktikum = models.CharField(max_length=255, null=True, blank=True)
+    waktu_mulai = models.DateTimeField(null=True, blank=True)
+    waktu_selesai = models.DateTimeField(null=True, blank=True)
     filename = models.CharField(max_length=255)
     video = models.FileField(upload_to="uploads/")
+    fps= models.IntegerField(default=0)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="QUEUED")
     progress = models.IntegerField(default=0)
     frame_current = models.IntegerField(default=0)

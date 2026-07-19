@@ -23,6 +23,18 @@
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data" action="{% url 'upload_video' %}">
                     {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Mata Kuliah Praktikum</label>
+                        <input type="text" class="form-control" name="name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tanggal & Jam Mulai</label>
+                        <input type="datetime-local" class="form-control" name="start_time">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tanggal & Jam Selesai</label>
+                        <input type="datetime-local" class="form-control" name="end_time">
+                    </div>
                     <div class="row g-3 align-items-end">
                         <div class="col-md-9">
                             <label class="form-label">Video</label>
@@ -43,6 +55,8 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
+                            <th>Mata Kuliah Praktikum</th>
+                            <th>Tanggal & Jam</th>
                             <th>File Video</th>
                             <th>Status</th>
                             <th></th>
@@ -51,6 +65,8 @@
                     <tbody>
                         {% for video_process in video_processes %}
                         <tr>
+                            <td>{{ video_process.nama_praktikum }}</td>
+                            <td>{{ video_process.waktu_mulai }} - {{ video_process.waktu_selesai }}</td>
                             <td>{{ video_process.filename }}</td>
                             <td>{{ video_process.status }}</td>
                             <td><a href="{% url 'detail_video' video_process.id %}" class="btn btn-primary btn-sm">

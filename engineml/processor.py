@@ -3,12 +3,12 @@ import cv2
 
 from django.conf import settings
 
-from web.models import VideoProcess
+from web.models import VideoProcess, DetectionResult
 from engineml.recognizer_instance import recognizer
 
 
 class VideoProcessor:
-    def __init__(self, job_id):
+    def __init__(self, job_id, type=None):
         self.job = VideoProcess.objects.get(pk=job_id)
 
     def process(self):
@@ -74,6 +74,14 @@ class VideoProcessor:
                 frame_number += 1
 
                 result = recognizer.detect(frame)
+                for det in result["detections"]:
+                    DetectionResult.objects.create(
+                        video=self.job,
+                        frame_number=frame_number,
+                        person_id=det["person"],
+                        activity=det["activity"],
+                        confidence=det["activity_confidence"]
+                    )
 
                 annotated = result["frame"]
 

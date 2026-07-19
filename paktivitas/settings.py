@@ -126,4 +126,4 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # YOLO model paths
 YOLO_MODEL = BASE_DIR / 'models' / 'yolov8n.pt'
-ACTIVITY_MODEL = BASE_DIR / 'modelml' / 'best_model.pth'
+ACTIVITY_MODEL = BASE_DIR / 'modelml' / 'activityresnet18_b16_1_4.pth'
